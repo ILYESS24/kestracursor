@@ -56,17 +56,30 @@
 
 ## ⚙️ Configuration Railway
 
-Le fichier `railway.json` configure :
-- Commande de démarrage automatique
-- Health checks
-- Politique de redémarrage
-- Variables d'environnement
+### Fichiers Railway :
+- **`Dockerfile.railway`** - Dockerfile optimisé pour Railway
+- **`railway.json`** - Configuration Railway complète
+- **`Procfile`** - Alternative simple pour Railway
+- **`start-railway.sh`** - Script de démarrage Linux
+- **`start-railway.bat`** - Script de démarrage Windows
+
+### Configuration :
+- Commande de démarrage : `/app/kestra server standalone`
+- Port : 8080
+- Health check : `/health`
+- Image de base : `kestra/kestra:latest`
+- Pas de docker-compose requis
 
 ## 🚨 Résolution de Problèmes
 
 ### Erreur `/app/kestra: not found`
 ```bash
 .\fix-kestra-docker.bat
+```
+
+### Erreur `docker-compose not found` sur Railway
+```bash
+.\railway-deploy-no-compose.bat
 ```
 
 ### Kestra non accessible
@@ -77,6 +90,11 @@ Le fichier `railway.json` configure :
 ### Déploiement échoué
 ```bash
 .\auto-deploy-railway.bat
+```
+
+### Vérification Railway
+```bash
+.\railway-check.bat
 ```
 
 ## 📝 Logs et Monitoring

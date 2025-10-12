@@ -1,6 +1,6 @@
 {
   "deploy": {
-    "startCommand": "docker-compose up -d",
+    "startCommand": "/app/kestra server standalone",
     "healthcheckPath": "/health",
     "healthcheckTimeout": 300,
     "restartPolicy": "always",
