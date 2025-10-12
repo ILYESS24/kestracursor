@@ -1,6 +1,6 @@
 {
   "deploy": {
-          "startCommand": "server standalone",
+          "startCommand": "/usr/local/bin/docker-entrypoint.sh server standalone",
     "healthcheckPath": "/health",
     "healthcheckTimeout": 300,
     "restartPolicy": "always",
