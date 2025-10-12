@@ -1,6 +1,6 @@
 {
   "deploy": {
-    "startCommand": "/app/bin/kestra server standalone",
+          "startCommand": "server standalone",
     "healthcheckPath": "/health",
     "healthcheckTimeout": 300,
     "restartPolicy": "always",
