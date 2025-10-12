@@ -1,1 +1,1 @@
-web: /app/kestra server standalone
+web: /usr/local/bin/kestra server standalone

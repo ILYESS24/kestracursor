@@ -1,5 +1,30 @@
-# Dockerfile optimisé pour Railway
-FROM kestra/kestra:latest
+# Dockerfile optimisé pour Railway avec installation Kestra
+FROM eclipse-temurin:21-jre-jammy
+
+# Variables d'environnement
+ENV KESTRA_VERSION=1.0.5
+ENV KESTRA_HOME=/app
+ENV PATH=$KESTRA_HOME/bin:$PATH
+
+# Créer le répertoire de travail
+WORKDIR $KESTRA_HOME
+
+# Installer les dépendances
+RUN apt-get update && \
+    apt-get install -y curl wget && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Télécharger et installer Kestra
+RUN wget -O kestra.zip "https://github.com/kestra-io/kestra/releases/download/v${KESTRA_VERSION}/kestra-${KESTRA_VERSION}.zip" && \
+    unzip kestra.zip && \
+    rm kestra.zip && \
+    chmod +x kestra-${KESTRA_VERSION}/bin/kestra && \
+    mv kestra-${KESTRA_VERSION}/* . && \
+    rm -rf kestra-${KESTRA_VERSION}
+
+# Créer les répertoires nécessaires
+RUN mkdir -p /app/storage /tmp/kestra-wd/tmp
 
 # Variables d'environnement pour Railway
 ENV KESTRA_CONFIGURATION="datasources:\n  postgres:\n    url: jdbc:postgresql://postgres:5432/kestra\n    driverClassName: org.postgresql.Driver\n    username: kestra\n    password: k3str4\nkestra:\n  repository:\n    type: postgres\n  storage:\n    type: local\n    local:\n      basePath: \"/app/storage\"\n  queue:\n    type: postgres\n  tasks:\n    tmpDir:\n      path: /tmp/kestra-wd/tmp\n  url: http://localhost:8080/"
@@ -7,5 +32,8 @@ ENV KESTRA_CONFIGURATION="datasources:\n  postgres:\n    url: jdbc:postgresql://
 # Ports exposés
 EXPOSE 8080 8081
 
+# Vérifier que l'exécutable existe
+RUN ls -la /app/bin/kestra && /app/bin/kestra --version
+
 # Commande de démarrage
-CMD ["server", "standalone"]
+CMD ["/app/bin/kestra", "server", "standalone"]

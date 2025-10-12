@@ -1,0 +1,14 @@
+# Dockerfile final optimisé pour Railway
+FROM kestra/kestra:latest
+
+# Variables d'environnement pour Railway
+ENV KESTRA_CONFIGURATION="datasources:\n  postgres:\n    url: jdbc:postgresql://postgres:5432/kestra\n    driverClassName: org.postgresql.Driver\n    username: kestra\n    password: k3str4\nkestra:\n  repository:\n    type: postgres\n  storage:\n    type: local\n    local:\n      basePath: \"/app/storage\"\n  queue:\n    type: postgres\n  tasks:\n    tmpDir:\n      path: /tmp/kestra-wd/tmp\n  url: http://localhost:8080/"
+
+# Créer les répertoires nécessaires
+RUN mkdir -p /app/storage /tmp/kestra-wd/tmp
+
+# Ports exposés
+EXPOSE 8080 8081
+
+# Commande de démarrage (utilise le chemin de l'image officielle)
+CMD ["/usr/local/bin/kestra", "server", "standalone"]
