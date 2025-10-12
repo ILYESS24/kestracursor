@@ -1,0 +1,9 @@
+name = "kestra-cloudflare"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[env.production]
+name = "kestra-cloudflare-prod"
+
+[env.staging]
+name = "kestra-cloudflare-staging"
