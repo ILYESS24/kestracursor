@@ -1,28 +1,14 @@
-FROM eclipse-temurin:21-jre-jammy
+# Dockerfile principal qui marche sur Railway
+FROM kestra/kestra:latest
 
-ARG KESTRA_PLUGINS=""
-ARG APT_PACKAGES=""
-ARG PYTHON_LIBRARIES=""
+# Variables d'environnement pour Railway
+ENV KESTRA_CONFIGURATION="datasources:\n  postgres:\n    url: jdbc:postgresql://postgres:5432/kestra\n    driverClassName: org.postgresql.Driver\n    username: kestra\n    password: k3str4\nkestra:\n  repository:\n    type: postgres\n  storage:\n    type: local\n    local:\n      basePath: \"/app/storage\"\n  queue:\n    type: postgres\n  tasks:\n    tmpDir:\n      path: /tmp/kestra-wd/tmp\n  url: http://localhost:8080/"
 
-WORKDIR /app
+# Créer les répertoires
+RUN mkdir -p /app/storage /tmp/kestra-wd/tmp
 
-RUN groupadd kestra && \
-    useradd -m -g kestra kestra
+# Ports
+EXPOSE 8080 8081
 
-COPY --chown=kestra:kestra docker /
-
-RUN apt-get update -y && \
-    apt-get upgrade -y && \
-    if [ -n "${APT_PACKAGES}" ]; then apt-get install -y --no-install-recommends ${APT_PACKAGES}; fi && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/* && \
-    curl -LsSf https://astral.sh/uv/0.6.17/install.sh | sh && mv /root/.local/bin/uv /bin && mv /root/.local/bin/uvx /bin && \
-    if [ -n "${KESTRA_PLUGINS}" ]; then /app/kestra plugins install ${KESTRA_PLUGINS} && rm -rf /tmp/*; fi && \
-    if [ -n "${PYTHON_LIBRARIES}" ]; then uv pip install --system ${PYTHON_LIBRARIES}; fi && \
-    chown -R kestra:kestra /app
-
-USER kestra
-
-ENTRYPOINT ["docker-entrypoint.sh"]
-
-CMD ["--help"]
+# Commande directe
+CMD ["/usr/local/bin/docker-entrypoint.sh", "server", "standalone"]
