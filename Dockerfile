@@ -1,8 +1,8 @@
 # Dockerfile principal qui marche sur Railway
 FROM kestra/kestra:latest
 
-# Variables d'environnement pour Railway
-ENV KESTRA_CONFIGURATION="datasources:\n  postgres:\n    url: jdbc:postgresql://postgres:5432/kestra\n    driverClassName: org.postgresql.Driver\n    username: kestra\n    password: k3str4\nkestra:\n  repository:\n    type: postgres\n  storage:\n    type: local\n    local:\n      basePath: \"/app/storage\"\n  queue:\n    type: postgres\n  tasks:\n    tmpDir:\n      path: /tmp/kestra-wd/tmp\n  url: http://localhost:8080/"
+# Variables d'environnement pour Railway avec H2
+ENV KESTRA_CONFIGURATION="kestra:\n  repository:\n    type: memory\n  storage:\n    type: local\n    local:\n      basePath: \"/app/storage\"\n  queue:\n    type: memory\n  tasks:\n    tmpDir:\n      path: /tmp/kestra-wd/tmp\n  url: http://localhost:8080/"
 
 # Créer les répertoires
 RUN mkdir -p /app/storage /tmp/kestra-wd/tmp
